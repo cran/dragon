@@ -1,48 +1,21 @@
 library(shiny)
 library(shinythemes)
 library(shinyWidgets)
+library(shinydashboard)
+library(shinyBS)
 library(colourpicker)
 library(DT)
 library(RColorBrewer)
 library(tidyverse)
-library(visNetwork)
+library(broom)
 library(magrittr)
 library(cowplot)
 library(igraph)
+library(visNetwork)
 
 
-library(shinydashboard)
-
-#################################################################################################
-### Code to setup a palette picker, modified from https://dreamrs.github.io/shinyWidgets/articles/palette_picker.html
-brewer.pal.info %>% 
-    rownames_to_column("palette") %>%
-    filter(category != "qual", colorblind == TRUE) %>%
-    arrange(desc(category)) -> brewer.palettes
-divseq.list <- list("Sequential" = brewer.palettes$palette[brewer.palettes$category == "seq"], "Diverging" = brewer.palettes$palette[brewer.palettes$category == "div"]) 
-brewer.palettes.hex <- brewer.palettes %>% mutate(colorlist = map2(maxcolors,palette, brewer.pal))
-palette.list <- setNames(as.list(brewer.palettes.hex$colorlist), brewer.palettes.hex$palette)
-
-linear_gradient <- function(cols) {
-  x <- round(seq(from = 0, to = 100, length.out = length(cols)+1))
-  ind <- c(1, rep(seq_along(x)[-c(1, length(x))], each = 2), length(x))
-  m <- matrix(data = paste0(x[ind], "%"), ncol = 2, byrow = TRUE)
-  res <- lapply(
-    X = seq_len(nrow(m)),
-    FUN = function(i) {
-      paste(paste(cols[i], m[i, 1]), paste(cols[i], m[i, 2]), sep = ", ")
-    }
-  )
-  res <- unlist(res)
-  res <- paste(res, collapse = ", ")
-  paste0("linear-gradient(to right, ", res, ");")
-}
-palette.linear.gradient <- unlist(lapply(X = palette.list, FUN = linear_gradient))
-palette.label.colors <- ifelse(brewer.palettes$category == "seq", "black", "white")
-#################################################################################################
-
-
-
+source("build_network.R")
+source("defs.R")
 
 dashboardPage(skin = "red",
     dashboardHeader(title = "dragon: Deep-time Redox Analysis of the Geobiology Ontology Network", titleWidth = "770px",
@@ -51,43 +24,104 @@ dashboardPage(skin = "red",
             icon = icon("question-circle"),
             badgeStatus = NULL,
             headerText = "Information:",
+            notificationItem("You are using dragon version 0.1", icon = icon("box-open")),
             notificationItem("Source Code", icon = icon("github"), href = "http://github.com/spielmanlab/dragon"),
-            notificationItem("Mineral Evolution Database", icon = icon("globe"), href =  "http://rruff.info/ima/")
+            notificationItem("IMA Database of Mineral Properties", icon = icon("globe"), href =  "http://rruff.info/ima/")
         )),
   dashboardSidebar(width = 350,
-    sidebarMenu(
+    sidebarMenu(id = "thismusttakeanidapparently",
         chooseSliderSkin(skin = "Flat"),
+            
             pickerInput("elements_of_interest", tags$span(style="font-weight:400", "Select focal element(s):"),
-                                                    choices = c("Ag" = "Ag", "Al" = "Al", "As" = "As", "Au" = "Au", "B" = "B", "Ba" = "Ba", "Be" = "Be", "Bi" = "Bi", "Br" = "Br", "C" = "C", "Ca" = "Ca", "Cd" = "Cd", "Ce" = "Ce", "Cl" = "Cl", "Co" = "Co", "Cr" = "Cr", "Cs" = "Cs", "Cu" = "Cu", "Dy" = "Dy", "Er" = "Er", "F" = "F", "Fe" = "Fe", "Ga" = "Ga", "Gd" = "Gd", "Ge" = "Ge", "H" = "H", "Hf" = "Hf", "Hg" = "Hg", "I" = "I", "In" = "In", "Ir" = "Ir", "K" = "K", "La" = "La", "Li" = "Li", "Mg" = "Mg", "Mn" = "Mn", "Mo" = "Mo", "N" = "N", "Na" = "Na", "Nb" = "Nb", "Nd" = "Nd", "Ni" = "Ni", "O" = "O", "Os" = "Os", "P" = "P", "Pb" = "Pb", "Pd" = "Pd", "Pt" = "Pt", "Rb" = "Rb", "Re" = "Re", "REE" = "REE", "Rh" = "Rh", "Ru" = "Ru", "S" = "S", "Sb" = "Sb", "Sc" = "Sc", "Se" = "Se", "Si" = "Si", "Sm" = "Sm", "Sn" = "Sn", "Sr" = "Sr", "Ta" = "Ta", "Te" = "Te", "Th" = "Th", "Ti" = "Ti", "Tl" = "Tl", "U" = "U", "V" = "V", "W" = "W", "Y" = "Y", "Yb" = "Yb", "Zn" = "Zn", "Zr" = "Zr"),
+                                                    #choices = c("Ag" = "Ag", "Al" = "Al", "As" = "As", "Au" = "Au", "B" = "B", "Ba" = "Ba", "Be" = "Be", "Bi" = "Bi", "Br" = "Br", "C" = "C", "Ca" = "Ca", "Cd" = "Cd", "Ce" = "Ce", "Cl" = "Cl", "Co" = "Co", "Cr" = "Cr", "Cs" = "Cs", "Cu" = "Cu", "Dy" = "Dy", "Er" = "Er", "F" = "F", "Fe" = "Fe", "Ga" = "Ga", "Gd" = "Gd", "Ge" = "Ge", "H" = "H", "Hf" = "Hf", "Hg" = "Hg", "I" = "I", "In" = "In", "Ir" = "Ir", "K" = "K", "La" = "La", "Li" = "Li", "Mg" = "Mg", "Mn" = "Mn", "Mo" = "Mo", "N" = "N", "Na" = "Na", "Nb" = "Nb", "Nd" = "Nd", "Ni" = "Ni", "O" = "O", "Os" = "Os", "P" = "P", "Pb" = "Pb", "Pd" = "Pd", "Pt" = "Pt", "Rb" = "Rb", "Re" = "Re", "REE" = "REE", "Rh" = "Rh", "Ru" = "Ru", "S" = "S", "Sb" = "Sb", "Sc" = "Sc", "Se" = "Se", "Si" = "Si", "Sm" = "Sm", "Sn" = "Sn", "Sr" = "Sr", "Ta" = "Ta", "Te" = "Te", "Th" = "Th", "Ti" = "Ti", "Tl" = "Tl", "U" = "U", "V" = "V", "W" = "W", "Y" = "Y", "Yb" = "Yb", "Zn" = "Zn", "Zr" = "Zr"),
+                                                    choices = all_elements,
                                                     options = list(
                                                         `actions-box` = TRUE, 
                                                         size = 4
                                                     ), 
                                                     multiple = TRUE
                         ),
-            prettyCheckbox("elements_by_redox","Use separate nodes for each element redox",value = FALSE, status="danger", animation="smooth", icon = icon("check")),
-            prettyCheckbox("force_all_elements","Force element intersection in minerals",value = FALSE, status="danger", animation="smooth", icon = icon("check")),
-            sliderInput("age_limit", "Age (Ga) for the youngest minerals:", min = 0, max = 4.5, step = 0.1, value = 0), #   
-            #checkboxInput("refresh_rruff","Refresh rruff data",value = FALSE), ## Eventually we want an option to requery their server and get latest and greatest. This does slow things down, however.
+            tipify(
+                prettyCheckbox("elements_by_redox","Use separate nodes for each element redox",value = FALSE, status="danger"),
+                title = "Separate element nodes into one per redox state, e.g. rather than one node for Iron (Fe) there may be several nodes such as Fe3+ and Fe2+, etc."
+            ), 
+            
+            tipify(
+                prettyCheckbox("force_all_elements","Force element intersection in minerals",value = FALSE, status="danger"),
+                title = "When multiple elements are selected, this option ensures that only minerals containing all elements appear in the network."
+            ),
+            
+            tipify( 
+                sliderInput("age_limit", "Age (Ga) for the youngest minerals:", min = 0, max = total_max_age, step = 0.1, value = c(0,total_max_age)), 
+                title = "Based on mineral discovery dates as recorded in MED"
+            ),
+            tipify(
+                awesomeRadio("max_age_type", "Use maximum or minimum age of minerals", checkbox=TRUE, inline = TRUE, choices = c("Maximum", "Minimum"), selected="Maximum", status="danger"),
+                title = "Determines which recorded date (maximum or minimum) is considered for including minerals in the network"
+            ),
 
+       
+            fluidRow(
+                column(8,
+                    tipify(
+                        pickerInput("network_layout", tags$span(style="font-weight:400", "Network layout:"),
+                            choices = list(
+                               `Force-directed` = c("Fruchterman Reingold" = "layout_with_fr",
+                                                  "GEM force-directed"      = "layout_with_gem"),
+                                Other = c("Sugiyama (bipartite) Layout" = "layout_with_sugiyama",
+                                                  #"Multidimensional scaling"    = "layout_with_mds",
+                                                  "Layout in circle"             = "layout_in_circle",
+                                                  "Layout in sphere"            = "layout_on_sphere")
+                            )
+                        ),
+                    title = "Algorithm for rendering the initial state of the interactive network"
+                    )
+                ),
+                column(4,
+                    conditionalPanel('input.network_layout == "layout_with_fr" | input.network_layout == "layout_with_gem"',{
+                        tipify(
+                           numericInput("network_layout_seed", tags$span(style="font-weight:400", "Seed:"), min = 0, max = Inf, value = 1),
+                           title = "Set the random seed for stochastic network layouts here."
+                        )
+                    })
+                
+                )
+            ),     
+            pickerInput("cluster_algorithm", tags$span(style="font-weight:400", "Network community detection (clustering) algorithm:"),
+                choices = c("Louvain",
+                            "Leading eigenvector"), selected = "Louvain"
+                ),
             br(), 
+
             actionBttn("go", "Initialize Network", size="sm", color = "danger"),
         br(),
         menuItem(text = "Node Colors",
 
             fluidRow(
                 column(7, 
-                    pickerInput("color_element_by", "Element color scheme:",
+                    pickerInput("color_element_by", "Color elements based on:",
                                  c("Single color"            = "singlecolor",  
-                                   "Color by network degree" = "network_degree_norm",
-                                   "Color by redox state"    = "redox",
-                                   "Color by Pauling electronegativity" = "pauling"))                            
+                                   "Degree centrality" = "network_degree_norm",
+                                  # "Color by closeness centrality" = "closeness",  ## causes all kinds of problems for disconnected graphs
+                                   "Redox state in network"  = "element_redox_network",
+                                   "HSAB theory" = "element_hsab",
+                                   "Electronegativity" = "pauling", 
+                                   "Number of localities (based on mineral discovery)" = "num_localities",
+                                   "Atomic mass" = "AtomicMass",
+                                   "Number of protons" = "NumberofProtons",
+                                   "Periodic Table Group"       = "TableGroup", 
+                                   "Periodic Table Period"       = "TablePeriod", 
+                                  # "Metal type"    = "MetalType", ## legend bad
+                                   "Density"       = "Density",
+                                   "Specific Heat"  = "SpecificHeat"))   
+                                   
+                         
                 ),
                 column(5, 
                     conditionalPanel(condition = "input.color_element_by == 'singlecolor'",   
                         {colourpicker::colourInput("element_color", "Color:", value = "skyblue")}
                     ),      
-                    conditionalPanel(condition = "input.color_element_by != 'singlecolor'",   
+                    conditionalPanel(condition = "input.color_element_by != 'singlecolor' & input.color_element_by != 'element_hsab'",   
                         {pickerInput("elementpalette", label = "Palette:",
                             choices = divseq.list, selected = "Blues", width = "90%",
                             choicesOpt = list(
@@ -102,12 +136,13 @@ dashboardPage(skin = "red",
             ),
             fluidRow(
                 column(7,
-                     pickerInput("color_mineral_by", "Mineral color scheme:",
+                     pickerInput("color_mineral_by", "Color minerals based on:",
                                      c("Single color"    = "singlecolor",  
-                                       "Color by maximum age"           = "max_age",      
-                                       "Color by number of localities"  = "num_localities",
-                                       "Color by mean Pauling electronegativity" = "mean_pauling", 
-                                       "Color by std dev Pauling electronegativity" = "sd_pauling"))
+                                       "Maximum known age"           = "max_age",      
+                                       "Number of known localities"  = "num_localities",
+                                       "Mean electronegativity" = "mean_pauling", 
+                                       #"Color by std dev Pauling electronegativity" = "sd_pauling",
+                                       "COV electronegativity" = "cov_pauling"))
                 ),
                 column(5,
                     conditionalPanel(condition = "input.color_mineral_by == 'singlecolor'",   
@@ -126,7 +161,8 @@ dashboardPage(skin = "red",
                     ) 
                  )
             ),
-            prettyCheckbox("color_by_cluster","Color by network cluster",value = FALSE, status="danger"),br()
+            prettyCheckbox("color_by_cluster","Color by Community Cluster",value = FALSE, status="danger",icon = icon("check")),
+            br()
             ),
         menuItem(text = "Color individual elements",
             fluidRow(
@@ -141,38 +177,46 @@ dashboardPage(skin = "red",
             )), 
         menuItem(text = "Node Sizes",
             fluidRow(
-                column(6, pickerInput("element_size_type", "Element node size:", 
+                column(6, pickerInput("element_size_type", "Size element nodes based on:", 
                                      c("Single size" = "singlesize",
-                                       "Size by network degree" = "network_degree_norm"), selected = "singlesize")
+                                       "Degree centrality" = "network_degree_norm", 
+                                       "Number of localities (based on mineral discovery)" = "num_localities",
+                                       "Atomic mass" = "AtomicMass",
+                                       "Number of protons" = "NumberofProtons",
+                                       "Density"       = "Density",
+                                       "Specific Heat"  = "SpecificHeat"), selected = "singlesize")
                     ),
                 column(6, conditionalPanel(condition = "input.element_size_type == 'singlesize'", 
-                            {sliderInput("element_label_size","Size",value=50,min=10,max=100, step=10)}) #### !!!!!!! label size!!!!!!!
+                            {sliderInput("element_label_size","Element size",value=50,min=10,max=100, step=10)}) #### !!!!!!! label size!!!!!!!
                     ),
                 column(6, conditionalPanel(condition = "input.element_size_type != 'singlesize'", 
-                            {sliderInput("size_scale","Scale size",value=20,min=10,max=100,step=10)}) 
+                            {sliderInput("element_size_scale","Scale element size",value=20,min=10,max=100,step=10)}) 
                 )
             ),                    
 
             fluidRow(
-                    column(6, pickerInput("mineral_size_type", "Mineral node size:", 
+                    column(6, pickerInput("mineral_size_type", "Size mineral nodes based on:", 
                              c("Single size" = "singlesize",
-                               "Size by maximum age"           = "max_age",      
-                               "Size by number of localities"  = "num_localities"
+                               "Maximum known age"           = "max_age",      
+                               "Number of known localities"  = "num_localities"
                                ), selected = "singlesize")
                     ),
                     column(6,       
                         conditionalPanel(condition = "input.mineral_size_type == 'singlesize'", 
-                            {sliderInput("mineral_size","Size",value=10,min=0,max=50, step = 5)})
-                    )
+                            {sliderInput("mineral_size","Mineral size",value=10,min=0,max=50, step = 5)})
+                    ),
+                    column(6, conditionalPanel(condition = "input.mineral_size_type != 'singlesize'", 
+                            {sliderInput("mineral_size_scale","Scale mineral size",value=10,min=1,max=25,step=1)}) 
+                )
             )
         ),
         menuItem(text = "Node Labels and Font", 
             fluidRow(
                 column(6, colourpicker::colourInput("element_label_color","Element font color",value = "#000000"))
             ),
-            fluidRow(
-                column(12, prettyCheckbox("only_use_element_label_color", "Always use the above color for element labels", value = FALSE, animation="smooth", icon = icon("check"), status="danger"))
-            ),
+            #fluidRow(
+            #    column(12, prettyCheckbox("only_use_element_label_color", "Always use the above color for element labels", value = FALSE, animation="smooth", icon = icon("check"), status="danger"))
+            #),
             fluidRow( 
                 column(6, colourpicker::colourInput("mineral_label_color","Mineral font color",value = "#000000")),
                 column(6, sliderInput("mineral_label_size","Mineral font size",value=0,min=0,max=50))
@@ -202,9 +246,11 @@ dashboardPage(skin = "red",
         menuItem(text = "Edge Attributes", 
             fluidRow(
                  column(6,
-                   pickerInput("color_edge_by", "Edge color scheme:",
+                   pickerInput("color_edge_by", "Color network edges by:",
                                            c("Single color" = "singlecolor",  
-                                             "Color by mean element redox state" = "redox"))
+                                             "Element redox state in network" = "element_redox_network",
+                                             "Element redox state in mineral" = "element_redox_mineral",
+                                             "Number of known mineral localities" = "num_localities_mineral"))
                  ),
                  column(6,
                      conditionalPanel(condition = "input.color_edge_by == 'singlecolor'",   
@@ -227,17 +273,7 @@ dashboardPage(skin = "red",
                 fluidRow(
                     column(12, sliderInput("edge_weight","Edge weight:",value=3,min=1,max=10))
                 )
-            ) #,
-#         menuItem(text = "Network Interaction Preferences",
-#                 numericInput("selected_degree", "Node selection highlight degree", min=1, max=5, 2, width = "270px"),
-#                 switchInput(inputId = "drag_view", "Drag network in frame",value = TRUE, size="mini",labelWidth = "300px"),
-#                 switchInput("zoom_view","Scroll in network frame to zoom",value = TRUE, size="mini",labelWidth = "300px"),
-#                 switchInput("hide_edges_on_drag","Hide edges when dragging nodes",value = TRUE, size="mini",labelWidth = "300px"),
-#                 switchInput("nav_buttons","Show navigation buttons",value = TRUE, size="mini",labelWidth = "300px"),
-#                 switchInput("hover","Emphasize on hover",value = TRUE, size="mini",labelWidth = "300px"),
-#                 switchInput("select_multiple_nodes", "Select multiple nodes at once", value=TRUE, size="mini",labelWidth = "300px")
-# 
-#             )
+            )
         
     )),
     dashboardBody(
@@ -245,100 +281,175 @@ dashboardPage(skin = "red",
             tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
         ),
           fluidRow(
+                bsAlert("alert"),          
                 div(style = "margin-right:1%; margin-left:1%;",
-                    
-                    div(style = "float:left;margin-left:2%;margin-bottom:1%;",
-                        dropdownButton(status = "danger", width="300px", circle=FALSE,icon=icon("gear"), tooltip = tooltipOptions(title = "Network interaction preferences"),
-                            numericInput("selected_degree", "Node selection highlight degree", min=1, max=5, 2, width = "240px"),
-                            switchInput("select_multiple_nodes", "Select multiple nodes at once", value=FALSE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger"),
-                            switchInput("hover","Emphasize on hover",value = TRUE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger"),
-                            switchInput("hide_edges_on_drag","Hide edges when dragging nodes (more efficient)",value = FALSE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger"),
-                            switchInput(inputId = "drag_view", "Drag network in frame",value = TRUE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger"),
-                            switchInput("zoom_view","Scroll in network frame to zoom",value = TRUE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger"),
-                            switchInput("nav_buttons","Show navigation buttons",value = FALSE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger")
-                        )                                   
-                    ),
-                    
-                    
-                    
-                    
+                                    
                     tabBox(width=12, 
-                        tabPanel("Visualize Network",                      
-                            div(style = "height:600px; overflow: hidden;", 
+                        tabPanel("Visualize Network",      
+                            div(style = "height:650px; overflow: hidden;", 
+                                div(style = "float:left;font-weight:bold;", 
+
+
+                                    div(style = "font-style:italic;",
+                                        textOutput("connectivity")
+                                    ),
+                                    textOutput("modularity"),
+                                    textOutput("n_element_nodes"),
+                                    textOutput("n_mineral_nodes"),
+                                    textOutput("n_edges")
+                                ),
+                                div(style = "float:right;", 
+                                    dropdownButton(status = "danger", right=TRUE, width="300px", circle=FALSE, icon=icon("gear"), size = "sm", tooltip = tooltipOptions(title = "Network interaction preferences"),
+                                        numericInput("selected_degree", "Node selection highlight degree", min=1, max=5, 2, width = "240px"),
+                                        switchInput("select_multiple_nodes", "Select multiple nodes at once", value=FALSE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger"),
+                                        switchInput("hover","Emphasize on hover",value = TRUE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger"),
+                                        switchInput("hide_edges_on_drag","Hide edges when dragging nodes (more efficient)",value = FALSE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger"),
+                                        switchInput(inputId = "drag_view", "Drag network in frame",value = TRUE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger"),
+                                        switchInput("zoom_view","Scroll in network frame to zoom",value = TRUE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger"),
+                                        switchInput("nav_buttons","Show navigation buttons",value = FALSE, size="mini",labelWidth = "200px", onStatus = "success", offStatus = "danger")
+                                    )
+                                ),
                                 visNetworkOutput("networkplot", height = "90%")
                             ),
                             div(style = "height:80px;",
-                                plotOutput("networklegend", height = "80%", width = "75%")
+                                plotOutput("networklegend", height = "80%", width = "100%")
                             )
                         ),  ## tabPanel
+                        
+                        
+                        tabPanel("Network Information",
+                            div(style = "font-size:85%;",
+                                div(style = "float:right;",
+                                    numericInput("table_digits", tags$span(style="font-size:85%", "Number of digits:"), min = 1, value = 3, width = "133px")
+                                ),
+                                DT::dataTableOutput("networkTable")
+                            )
+                        ),
+
+
                         tabPanel("Analyze Network",
                             helpText("In this tab, you can construct a linear regression model to analyze properties of minerals in the specified network."),
-                        
-                        fluidRow(
-                            column(7, 
-
-                                pickerInput("response", tags$b("Select the response (dependent) variable:"), 
-                                    choices = c("Maximum known age" ,#           = "max_age",
-                                                #"Average redox state" = "redox",
-                                                "Mean Pauling electronegativity",# = "mean_pauling", 
-                                                "Standard deviation Pauling electronegativity",#  = "sd_pauling", 
-                                                "Network degree (normalized)",#   = "network_degree_norm",
-                                                "Number of known localities"), selected="Maximum known age",
-                                    ),
-
-                                pickerInput("predictor", tags$b("Select the predictor (independent) variable:"), 
-                                    choices = c("Maximum known age" ,#           = "max_age",
-                                                #"Average redox state" = "redox",
-                                                "Mean Pauling electronegativity",# = "mean_pauling", 
-                                                "Standard deviation Pauling electronegativity",#  = "sd_pauling", 
-                                                "Louvain Cluster",#      = "cluster_ID",
-                                                "Network degree (normalized)",#   = "network_degree_norm",
-                                                "Number of known localities"), selected="Mean Pauling electronegativity",
+                            bsAlert("lm_alert"),
+                            fluidRow(
+                                column(4, 
+                                    pickerInput("response", tags$b("Select the response (dependent) variable:"), 
+                                        choices = model_response_choices, selected=max_age_str
+                                    )
+                                    #actionBttn("gomodel", "Update linear model", size="sm", color = "danger"),
+                                    #br(),br(),br(),
+                                    #span(textOutput("model_sanity"), style="color:red;font-weight:bold;font-size:1.25em;"),
+                                    #span(textOutput("model_sanity_n"), style="color:red;font-weight:bold;font-size:1.25em;"),
+                                    #br()
                                 ),
-                                br(),br(),
-                                span(textOutput("model_sanity"), style="color:red;font-weight:bold;font-size:1.25em;"),
-                                br()
-                                
-                            ),
-                            
-                            column(5,
-                                p(tags$b("Preferences for plot of model results:")),
-                                prettyCheckbox("logx", "Use log scale on X-axis", status="danger", animation="smooth", icon = icon("check")),
-                                prettyCheckbox("logy", "Use log scale on Y-axis", status="danger", animation="smooth", icon = icon("check")),
-                                prettyCheckbox("bestfit", "Show regression line (with 95% confidence interval).", status="danger", animation="smooth", icon = icon("check")),
-                                ## LOL no apologies for the line below.
-                                helpText(HTML('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'), "Note that these options are not applicable to Louvain Cluster analysis.")
-                            )
+                                column(4,
+
+                                    pickerInput("predictor", tags$b("Select the predictor (independent) variable:"), 
+                                        choices = model_predictor_choices, selected=cov_pauling_str
+                                    ),
+                                    conditionalPanel('input.predictor == "Community cluster"',{ 
+                                        textOutput("cluster_fyi")
+                                    })
+                                )
                             ), ## fluidrow
                             fluidRow(
-                            column(7,
-                                DT::dataTableOutput("fitted_model"),
-                                br(),br(),
-                                conditionalPanel( condition = "input.predictor == 'Louvain Cluster'", {
-                                    DT::dataTableOutput("fitted_tukey")
-                                })
-                            ),
-                            column(5,
-                                plotOutput("fitted_model_plot"),
-                                div(style="display:inline-block; float:right;",downloadBttn("download_model_plot", "Download Plot", size = "sm", style = "minimal", color = "danger"))                                
-                            )), br()
-                        ) ## tabPanel                 
+                                column(7,
+                                    DT::dataTableOutput("fitted_model"),
+                                    br(),br(),
+                                    conditionalPanel( condition = 'input.predictor == "Community cluster"', {
+                                        DT::dataTableOutput("fitted_tukey")
+                                    })
+                                ),
+                                column(5,
+                                    plotOutput("fitted_model_plot"),
+                                    #conditionalPanel('input.predictor != "Community cluster"',{ 
+                                    #    uiOutput("fitted_model_plot_preferences")
+                                    #}),
+                                    p(tags$b("Plot styling options (except for community cluster analysis):")),                      
+                                    prettyCheckbox("logx", "Use log scale on X-axis", value = FALSE, status="danger", animation="smooth", icon = icon("check")),
+                                    prettyCheckbox("logy", "Use log scale on Y-axis", value = FALSE, status="danger", animation="smooth", icon = icon("check")),
+                                    prettyCheckbox("bestfit", "Show regression line (with 95% confidence interval).", value = FALSE, status="danger", animation="smooth", icon = icon("check")),
+                                    fluidRow(
+                                        column(6, colourpicker::colourInput("point_color", "Color for points", value = "black")),
+                                        column(6, colourpicker::colourInput("bestfit_color", "Color for regression line", value = "blue"))
+                                    ),
+                                    div(style="display:inline-block; float:right;",
+                                        downloadBttn("download_model_plot", "Download Plot", size = "sm", style = "minimal", color = "danger")
+                                    )                                
+                                )
+                            )
+                        ), ## tabPanel    
+                        tabPanel("Timeline View", id = "timeline", 
+                            div(style = "height:700px;", 
+                                
+                                div(style="display:inline-block; float:right; height:15%; margin-top:30px;",
+                                    downloadBttn("download_timeline_plot", "Download Plot", size = "sm", style = "minimal", color = "danger")
+                                ), 
+                                div(style = "display:inline-block; float:right; height:15%; width:260px; margin:10px;",
+                                    colourpicker::colourInput("timeline_color_notselected", "Color of minerals outside selected age range", value = "chocolate4")
+                                ),
+                                div(style = "display:inline-block; float:right; height:15%; width:260px; margin:10px;",
+                                    colourpicker::colourInput("timeline_color_selected", "Color of minerals within selected age range", value = "peru")
+                                ),                                    
+                                plotOutput("timeline", width = "100%", height = "80%")
+                                                           
+                            )
+                        )  ## tabPanel    
+                          
                     ), # tabBox
-                    
                     
                     br(),br(),br(),
-                    tabBox(width=12, 
-                        tabPanel("Selected Node Information", 
-                            DT::dataTableOutput("nodeTable")
-                        ),
-                        tabPanel("Associated Mineral Localities", 
-                            DT::dataTableOutput("localityTable")
-                        ), 
-                        tabPanel("Node Clustering and Degree", 
-                            DT::dataTableOutput("clusterTable")
-                        )                       
-                    ), # tabBox
-                    box(width = 12,status = "primary",
+                    box(width=12,status = "primary", 
+                        title = "Selected Node Information", 
+                            h5("Choose which variables to include in table."),
+                            div(style="display:inline-block;vertical-align:top;",
+                                prettyCheckboxGroup(
+                                       inputId = "columns_selectednode_1",
+                                       label = tags$span(style="font-weight:700", "Mineral variables:"), 
+                                       choices = selected_node_table_column_choices_mineral,
+                                       status = "danger",
+                                       animation="smooth",
+                                       icon = icon("check")
+                                )),
+                            div(style="display:inline-block;vertical-align:top;",
+                                prettyCheckboxGroup(
+                                       inputId = "columns_selectednode_2",
+                                       label = tags$span(style="font-weight:700", "Element variables:"), 
+                                       choices = selected_node_table_column_choices_element,
+                                       status = "danger",
+                                       animation="smooth",
+                                       icon = icon("check")
+                                )),
+                            div(style="display:inline-block;vertical-align:top;",
+                                prettyCheckboxGroup(
+                                       inputId = "columns_selectednode_4",
+                                       label = tags$span(style="font-weight:700", "Network variables:"), 
+                                       choices = selected_node_table_column_choices_netinfo,
+                                       status = "danger",
+                                       animation="smooth",
+                                       icon = icon("check")
+                                )),
+                            div(style="display:inline-block;vertical-align:top;",
+                                prettyCheckboxGroup(
+                                       inputId = "columns_selectednode_3",
+                                       label = tags$span(style="font-weight:700", "Locality variables:"), 
+                                       choices = selected_node_table_column_choices_locality,
+                                       status = "danger",
+                                       animation="smooth",
+                                       icon = icon("check")
+                                )),
+                        div(style="font-size:90%;", DT::dataTableOutput("nodeTable"))
+                    ),
+                    
+                    #br(),br(),br(),
+                    #tabBox(width=12, 
+                    #    tabPanel("Selected Node Information", 
+                    #        DT::dataTableOutput("nodeTable")
+                    #    ),
+                    #    tabPanel("Node Clustering and Centrality", 
+                    #        DT::dataTableOutput("clusterTable")
+                    #    )                       
+                    #), # tabBox
+                    box(width = 12,status = "primary", title = "Network Export",
                         fluidRow(
                             column(3,
                                 downloadBttn("exportNodes", "Export nodes as CSV", size = "sm", style = "minimal", color = "danger")
