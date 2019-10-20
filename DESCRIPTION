@@ -1,7 +1,7 @@
 Package: dragon
 Type: Package
 Title: Deep Time Redox Analysis of the Geobiology Ontology Network
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c( person("Stephanie J.", "Spielman", role = c("aut", "cre"), email = "spielman@rowan.edu"))
 Maintainer: Stephanie J. Spielman <spielman@rowan.edu>
 Description: Visualization and manipulation of the mineral-chemistry network across deep time on earth. 
@@ -18,6 +18,6 @@ Imports: tidyverse, broom, cowplot, magrittr, shiny, shinythemes,
         colorspace, RColorBrewer, DT, visNetwork, igraph
 Suggests: knitr, testthat, shinytest
 VignetteBuilder: knitr
-Packaged: 2019-09-13 13:35:43 UTC; spielman
+Packaged: 2019-10-18 20:05:59 UTC; spielman
 Author: Stephanie J. Spielman [aut, cre]
-Date/Publication: 2019-09-13 13:50:03 UTC
+Date/Publication: 2019-10-20 07:10:06 UTC
