@@ -1,4 +1,4 @@
-92ea35e04b4d74cbca08eb926a36b452 *DESCRIPTION
+0a22fe8cfe6aac4a6f79692810061296 *DESCRIPTION
 2256624b8bb36a175b53427723963086 *NAMESPACE
 e8dfdaab59ce61743912ee7dbbda98ca *NEWS.md
 dc6518362117b1581d2addcd926eb0f0 *R/app_config.R
@@ -23,7 +23,7 @@ f8267612d933e117b58b995458a4e536 *R/utils_names.R
 4b318756280ea358705b95bf68b99803 *R/utils_palette.R
 6660cc1e525db777a1d3b4159909075b *R/utils_style-network.R
 78870be9a1daf3076f20099cf7ac4e2a *R/utils_ui-choices.R
-7974db2d2cedae058b8e76c2d16d3aab *README.md
+2375d098d6d614c8f14e802c50daa90f *README.md
 2f7fe87555f999c83a36a5d558562660 *TODO
 9476fd677388af35a935fc779fcf34ec *build/vignette.rds
 52eb42eb369d26805ebc448519d8e904 *inst/app/www/bootstrap-select.min.css
@@ -61,7 +61,8 @@ dec3251946ac22e0b2340be52f9e9367 *inst/app/www/palette_png/make_palette_png.R
 d78c9d7aad7276e98c5e35c8d30d84c8 *inst/app/www/script.js
 081dec091e7c04da55130600d3664e42 *inst/doc/dragon.R
 6f02450bd3bd55895b5b6278ec977fd7 *inst/doc/dragon.Rmd
-42b4cbd1181f060d14bc14c8f7a460e0 *inst/doc/dragon.html
+9a762f3b567ec896426d066c21c34361 *inst/doc/dragon.html
+46f0f5d3222cf0f06ec16b2e44263162 *inst/dragon/rsconnect/shinyapps.io/sjspielman/dragon.dcf
 dc7dc05ab94509c816f562015de614c2 *inst/golem-config.yml
 51dd6bb2bbe312790a383a0d0d29de99 *inst/testdata/edges_by_redox.csv.zip
 dd5e1688dcc8a3d102d865cdcd072d00 *inst/testdata/graph_by_redox.igraph
@@ -84,7 +85,7 @@ c4deb1c6668bfaebb0c3d253f8c8d8cc *man/run_app.Rd
 09263c3fb458333505cc3d7f8fb29df6 *tests/testthat/test_calculate-network-info.R
 9dcae0aee735a18c8fb5c9049f8942a2 *tests/testthat/test_export-network.R
 ac88b6f6eac2bb08b5c26dcac853a0a3 *tests/testthat/test_golem_recommended.R
-8e77e96c71864580664917d18b9804aa *tests/testthat/test_prepare-med-data.R
+cf4e3aa5e8656218396ffc4643a51fd6 *tests/testthat/test_prepare-med-data.R
 3d6566b297e33545bd815cb14347df52 *tests/testthat/test_style-network.R
 cde8e049f54cb5438589d1fa92853e27 *tests/testthat/test_timeline.R
 c02d6a21ed3cf88532b9df6b047ad98d *tests/testthat/test_utils.R
