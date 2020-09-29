@@ -1,4 +1,4 @@
-390508ec97128a55a2de129905ed8c68 *DESCRIPTION
+54b90ee6406b47d85b3dffef2cf4b27e *DESCRIPTION
 5956505d603f03e9da45db45261d12be *NAMESPACE
 e8dfdaab59ce61743912ee7dbbda98ca *NEWS.md
 dc6518362117b1581d2addcd926eb0f0 *R/app_config.R
@@ -23,12 +23,12 @@ d5857b7f6609953aba3180726e97987a *R/utils_globals.R
 4b318756280ea358705b95bf68b99803 *R/utils_palette.R
 6660cc1e525db777a1d3b4159909075b *R/utils_style-network.R
 78870be9a1daf3076f20099cf7ac4e2a *R/utils_ui-choices.R
-744cfd53239fb053ded4c9ab8a09b0ed *README.md
+cec237f20a28f9b5ae2b9825d22260c6 *README.md
 2f7fe87555f999c83a36a5d558562660 *TODO
 fdbeedbc87a7a36780c0f91e928abc31 *build/vignette.rds
 52eb42eb369d26805ebc448519d8e904 *inst/app/www/bootstrap-select.min.css
 1965d6adaf99760279a9d7305bbdb942 *inst/app/www/custom.css
-d6adfaf409c6a7bf7cd78b19c01ea00b *inst/app/www/favicon.ico
+6505b8b1f7470e1d53fbc36f73f7e6e8 *inst/app/www/favicon.ico
 d9cc6be810e4328199941c0bf080bc23 *inst/app/www/handlers.js
 9bad4f8193152efdeecdc1c5372ee5c5 *inst/app/www/palette_png/Blues.png
 dff5589ce09e7b5b6d2014b3eed27331 *inst/app/www/palette_png/BrBG.png
@@ -61,7 +61,7 @@ dec3251946ac22e0b2340be52f9e9367 *inst/app/www/palette_png/make_palette_png.R
 d78c9d7aad7276e98c5e35c8d30d84c8 *inst/app/www/script.js
 081dec091e7c04da55130600d3664e42 *inst/doc/dragon.R
 6f02450bd3bd55895b5b6278ec977fd7 *inst/doc/dragon.Rmd
-cbfb6912e4cc121edbaf947d41311dbc *inst/doc/dragon.html
+0e5d0e4c188967af62d47366b3514d9f *inst/doc/dragon.html
 dc7dc05ab94509c816f562015de614c2 *inst/golem-config.yml
 51dd6bb2bbe312790a383a0d0d29de99 *inst/testdata/edges_by_redox.csv.zip
 dd5e1688dcc8a3d102d865cdcd072d00 *inst/testdata/graph_by_redox.igraph
