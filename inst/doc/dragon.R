@@ -9,9 +9,14 @@ knitr::opts_chunk$set(
 #  ## Install from CRAN:
 #  install.packages("dragon")
 #  
-#  ## Install from github:
-#  library(remotes)
+#  ## Install from github (current release)
+#  #install.packages("remotes")
 #  remotes::install_github("sjspielman/dragon")
+#  
+#  
+#  ## Install from github for experimental features:
+#  #install.packages("remotes")
+#  remotes::install_github("sjspielman/dragon", ref = "dev")
 
 ## -----------------------------------------------------------------------------
 #  ## Launch application
