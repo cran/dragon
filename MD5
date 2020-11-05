@@ -1,4 +1,4 @@
-9346cf18d6e9483ee54e12fd85b23653 *DESCRIPTION
+3333686c2d87c86ec286e44a09f43899 *DESCRIPTION
 5956505d603f03e9da45db45261d12be *NAMESPACE
 e8dfdaab59ce61743912ee7dbbda98ca *NEWS.md
 dc6518362117b1581d2addcd926eb0f0 *R/app_config.R
@@ -8,7 +8,7 @@ eaa2ab775f61bc90dd623ab9d1f87a0c *R/app_server.R
 daa226b0d3524ec5f5ccba0165bf0277 *R/fct_build-linear-models.R
 d15ccb47f4e6cc6dc9dd9e18d09ca84d *R/fct_build-network.R
 a0603850b63fa01a5ee1160aa8609162 *R/fct_build-shiny-tables.R
-221a0a9fd7cb36379170cf69af1db155 *R/fct_calculate-network-info.R
+11abe0bf50f6f678761ce44fd3f6910c *R/fct_calculate-network-info.R
 fcf30776877eeccaf1d91f0e45c27bf3 *R/fct_export-network.R
 096e620efeb4689c1ab5dc79f5dd2690 *R/fct_prepare-med-data.R
 3a37d8baaead14d2a0cb2842119ef99e *R/fct_style-network.R
@@ -17,12 +17,12 @@ fcf30776877eeccaf1d91f0e45c27bf3 *R/fct_export-network.R
 63f48d247bfe6d34abe2f3b979088f14 *R/mod_choose-custom-element-colors.R
 635fb65ea07ef593636456407b3f805a *R/run_app.R
 efff86d8b7838c9be971c17f4be8984f *R/sysdata.rda
-0b4b006d1da666b2ed5a087cb1e3f91a *R/utils_definitions.R
+8978ea90e222880c48f412a9cc9f9456 *R/utils_definitions.R
 d5857b7f6609953aba3180726e97987a *R/utils_globals.R
 851f67f626ebe7c45c12748ec018930d *R/utils_names.R
 6660cc1e525db777a1d3b4159909075b *R/utils_style-network.R
 78870be9a1daf3076f20099cf7ac4e2a *R/utils_ui-choices.R
-cec237f20a28f9b5ae2b9825d22260c6 *README.md
+ba21269bc89b0ba67f63633b140f2d1f *README.md
 2f7fe87555f999c83a36a5d558562660 *TODO
 a7620e136d5b514c0aa5597150b36201 *build/vignette.rds
 52eb42eb369d26805ebc448519d8e904 *inst/app/www/bootstrap-select.min.css
@@ -60,7 +60,7 @@ dec3251946ac22e0b2340be52f9e9367 *inst/app/www/palette_png/make_palette_png.R
 d78c9d7aad7276e98c5e35c8d30d84c8 *inst/app/www/script.js
 01d9e657a749bba8de2c6e97a62ed605 *inst/doc/dragon.R
 7eef5344ccc329651c0054a4c7cdb8a3 *inst/doc/dragon.Rmd
-a67a739eab2e58e3d41e47f472aa4e4f *inst/doc/dragon.html
+59cd7f8c56c64eaa91183da8953147ae *inst/doc/dragon.html
 dc7dc05ab94509c816f562015de614c2 *inst/golem-config.yml
 51dd6bb2bbe312790a383a0d0d29de99 *inst/testdata/edges_by_redox.csv.zip
 dd5e1688dcc8a3d102d865cdcd072d00 *inst/testdata/graph_by_redox.igraph

@@ -1,6 +1,6 @@
 Package: dragon
 Title: Deep Time Redox Analysis of the Geobiology Ontology Network
-Version: 1.0.4
+Version: 1.0.5
 Authors@R: person("Stephanie J.", "Spielman", 
                   email = "spielman@rowan.edu", 
                   role = c("aut", "cre"),
@@ -35,9 +35,9 @@ Collate: 'utils_definitions.R' 'utils_globals.R' 'utils_names.R'
         'mod_choose-custom-element-colors.R' 'app_config.R'
         'app_server.R' 'app_ui.R' 'run_app.R'
 NeedsCompilation: no
-Packaged: 2020-10-25 13:46:23 UTC; spielman
+Packaged: 2020-11-05 15:43:06 UTC; spielman
 Author: Stephanie J. Spielman [aut, cre]
     (<https://orcid.org/0000-0002-9090-4788>)
 Maintainer: Stephanie J. Spielman <spielman@rowan.edu>
 Repository: CRAN
-Date/Publication: 2020-10-25 14:10:05 UTC
+Date/Publication: 2020-11-05 17:30:18 UTC
