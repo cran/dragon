@@ -12,7 +12,7 @@
 
 <meta name="author" content="Stephanie J. Spielman" />
 
-<meta name="date" content="2020-11-05" />
+<meta name="date" content="2020-12-07" />
 
 <title>Introduction to mineral-chemistry network analysis in dragon</title>
 
@@ -386,7 +386,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Introduction to mineral-chemistry network analysis in <code>dragon</code></h1>
 <h4 class="author">Stephanie J. Spielman</h4>
-<h4 class="date">2020-11-05</h4>
+<h4 class="date">2020-12-07</h4>
 
 
 
@@ -439,7 +439,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;sjspielman/dragon&quot;</span>)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="co">## Install from github for experimental features:</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="co">## Install from github for _experimental and unguaranteed_ features:</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="co">#install.packages(&quot;remotes&quot;)</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;sjspielman/dragon&quot;</span>, <span class="dt">ref =</span> <span class="st">&quot;dev&quot;</span>)</span></code></pre></div>
 <p>To run <code>dragon</code> locally on your computer after installing the package, simply load the library and issue either command, <code>run_dragon()</code> or <code>run_app()</code>:</p>
@@ -458,6 +458,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <li><strong>Select focal element(s).</strong>
 <ul>
 <li>Use this dropdown menu to select one or more focal elements for your network. <code>dragon</code> will construct its network from all minerals that contain your selected elements. To build the full mineral network, simply click the “Select All” button in the dropdown - this will automatically selected all elements to be included.</li>
+</ul></li>
+<li><strong>Select focal elements based on mineral composition.</strong> <em>(New in version 1.1.0!)</em>
+<ul>
+<li>You can also select focal elements based on a mineral of interest using this dropdown menu. For example, you might be interested in studying the deep-time networks of all elements in a certain mineral. All constituent elements contained in minerals you select from this list will be applied as focal elements. For example, if you select “Acanthine” (formula Ag<sub>2</sub>S), both Ag and S will be considered as the focal elements.</li>
 </ul></li>
 <li><strong>Age (Ga) range of minerals.</strong>
 <ul>
@@ -529,7 +533,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <ul>
 <li><strong>Node selection highlight degree</strong>
 <ul>
-<li>This specifies how many connected nodes will be emphasized when you click a node. The default degree of “2” means all nodes within 2 degrees of separation ($$2 edges) will be emphasized.</li>
+<li>This specifies how many connected nodes will be emphasized when you click a node. The default degree of “2” means all nodes within 2 degrees of separation (≤2 edges) will be emphasized.</li>
 </ul></li>
 <li><strong>Emphasize on hover</strong>
 <ul>
@@ -589,7 +593,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="unnumbered">References</h1>
 <div id="refs" class="references hanging-indent">
 <div id="ref-visnetwork">
-<p>Almende, B. V., T. Benoit, and R. Titouan. 2019. <em>VisNetwork: Network Visualization Using ’Vis.js’ Library.</em> <a href="https://CRAN.R-project.org/package=visNetwork">https://CRAN.R-project.org/package=visNetwork</a>.</p>
+<p>Almende, B. V., T. Benoit, and R. Titouan. 2019. <em>visNetwork: Network Visualization Using ’Vis.js’ Library.</em> <a href="https://CRAN.R-project.org/package=visNetwork">https://CRAN.R-project.org/package=visNetwork</a>.</p>
 </div>
 <div id="ref-louvain">
 <p>Blondel, Vincent D., Jean-Loup Guillaume, Renaud Lambiotte, and Etienne Lefebvre. 2008. “Fast Unfolding of Communities in Large Networks.” <em>Journal of Statistical Mechanics: Theory and Experiment</em> 2008 (10): P10008. <a href="https://doi.org/10.1088/1742-5468/2008/10/P10008">https://doi.org/10.1088/1742-5468/2008/10/P10008</a>.</p>
@@ -598,7 +602,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Chang, Winston, Joe Cheng, JJ Allaire, Yihui Xie, and Jonathan McPherson. 2020. <em>Shiny: Web Application Framework for R.</em> <a href="https://CRAN.R-project.org/package=shiny">https://CRAN.R-project.org/package=shiny</a>.</p>
 </div>
 <div id="ref-igraph">
-<p>Csardi, Gabor, and Tamas Nepusz. 2006. “The Igraph Software Package for Complex Network Research.” <em>InterJournal</em> Complex Systems: 1695. <a href="https://igraph.org">https://igraph.org</a>.</p>
+<p>Csardi, Gabor, and Tamas Nepusz. 2006. “The igraph Software Package for Complex Network Research.” <em>InterJournal</em> Complex Systems: 1695. <a href="https://igraph.org">https://igraph.org</a>.</p>
 </div>
 <div id="ref-med">
 <p>Golden, Joshua J., Robert T. Downs, Robert M. Hazen, Alexander J. Pires, and Jolyon Ralph. 2019. “Mineral Evolution Database: Data-Driven Age Assignment, How Does a Mineral Get an Age?” In <em>GSA Annual Meeting</em>. Phoenix, Arizona. <a href="https://doi.org/10.1130/abs/2019AM-334056">https://doi.org/10.1130/abs/2019AM-334056</a>.</p>

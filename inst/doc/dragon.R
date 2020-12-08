@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 #  remotes::install_github("sjspielman/dragon")
 #  
 #  
-#  ## Install from github for experimental features:
+#  ## Install from github for _experimental and unguaranteed_ features:
 #  #install.packages("remotes")
 #  remotes::install_github("sjspielman/dragon", ref = "dev")
 
