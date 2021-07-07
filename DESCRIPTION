@@ -1,6 +1,6 @@
 Package: dragon
 Title: Deep Time Redox Analysis of the Geobiology Ontology Network
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: person("Stephanie J.", "Spielman", 
                   email = "spielman@rowan.edu", 
                   role = c("aut", "cre"),
@@ -8,9 +8,9 @@ Authors@R: person("Stephanie J.", "Spielman",
 Description: Create, visualize, manipulate, and analyze bipartite mineral-chemistry
     networks for set of focal element(s) across deep-time on Earth. The method is 
     described in Spielman and Moore (2020) <doi:10.3389/feart.2020.585087>.
-License: GPL-3
+License: MIT + file LICENSE
 Imports: config, golem (>= 0.2.1), shiny, DT (>= 0.14), ggplot2 (>=
-        3.3.2), readr, openxlsx, dplyr (>= 1.0.0), RColorBrewer,
+        3.3.5), readr, openxlsx, dplyr (>= 1.0.0), RColorBrewer,
         stringr, tidyr (>= 1.0.0), purrr, tibble, broom (>= 0.5.6),
         cowplot (>= 1.0.0), ggforce, magrittr, shinydashboard,
         shinyWidgets, colourpicker (>= 1.0), colorspace (>= 1.4),
@@ -18,7 +18,6 @@ Imports: config, golem (>= 0.2.1), shiny, DT (>= 0.14), ggplot2 (>=
         stats, promises, future, lubridate, xml2, rvest, curl,
         tidyselect
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.1.1
 Suggests: testthat (>= 2.1.0), processx, knitr, zip, rmarkdown
 VignetteBuilder: knitr
@@ -35,9 +34,9 @@ Collate: 'utils_definitions.R' 'utils_globals.R' 'utils_names.R'
         'mod_choose-custom-element-colors.R' 'app_config.R'
         'app_server.R' 'app_ui.R' 'run_app.R'
 NeedsCompilation: no
-Packaged: 2020-12-07 15:18:07 UTC; spielman
+Packaged: 2021-07-07 16:10:43 UTC; spielman
 Author: Stephanie J. Spielman [aut, cre]
     (<https://orcid.org/0000-0002-9090-4788>)
 Maintainer: Stephanie J. Spielman <spielman@rowan.edu>
 Repository: CRAN
-Date/Publication: 2020-12-08 08:10:15 UTC
+Date/Publication: 2021-07-07 17:30:10 UTC

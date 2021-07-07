@@ -1,11 +1,13 @@
 
 # dragon
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://www.tidyverse.org/lifecycle/#stable) 
+stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html) 
 [![Build Status](https://travis-ci.org/sjspielman/dragon.svg?branch=master)](https://travis-ci.org/sjspielman/dragon)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/dragon)](https://CRAN.R-project.org/package=dragon)
-**The current version is 1.1.0.** (Currently on its way to CRAN, which has 1.0.5).
+
+**The current version is 1.2.0.**
+_Note that the license was changed to MIT with the release of 1.2.0 for compatibility with dependencies._
 
 
 <img src="inst/app/www/favicon.ico" height="250"/>
@@ -13,6 +15,10 @@ stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://www.ti
 
 
 The `dragon` (**D**eep time **R**edox **A**nalysis of the **G**eobiology **O**ntology **N**etwork) package provides a [Shiny Application](https://shiny.rstudio.com/) for generating, exploring, and analyzing bipartite mineral-chemistry networks over deep time on Earth using information from the [Mineral Evolution Database](https://rruff.info/ima/), with a specific application of investigating biologically-relevant evolution of element redox states and availability over time. `dragon` uses `igraph` and `visNetwork` library (a terribly handy R wrapper for `vis.js`) to construct user-friendly interactive networks. 
+
+**For instructions on obtaining and using `dragon`**, please see the [vignette](http://htmlpreview.github.io/?https://github.com/sjspielman/dragon/blob/master/doc/dragon.html).
+
+**Current link to server of current release of `dragon`:** [https://sjspielman.shinyapps.io/dragon](https://sjspielman.shinyapps.io/dragon)
 
 **The associated publication** is available [here](https://doi.org/10.3389/feart.2020.585087) and can be cited as:
 
@@ -47,11 +53,7 @@ Or, in LaTeX:
 }
 ```
 
-**For instructions on obtaining and using `dragon`**, please see the [vignette](http://htmlpreview.github.io/?https://github.com/sjspielman/dragon/blob/master/doc/dragon.html).
-
-**Current link to server of current release of `dragon`:** [https://sjspielman.shinyapps.io/dragon](https://sjspielman.shinyapps.io/dragon)
-
-
+<!--
 **Current link to server of development and wholly unguaranteed version of `dragon`:** [https://sjspielman.shinyapps.io/dragon-dev](https://sjspielman.shinyapps.io/dragon-dev)
-
+-->
 
